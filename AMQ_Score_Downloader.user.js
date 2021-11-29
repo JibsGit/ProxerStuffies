@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ Score Download
-// @version      1.0.6
+// @version      1.0.7
 // @description  Displays Score Final in AMQ of all Players and downloads a json of them
 // @author       Jib
 // @match        https://animemusicquiz.com/*
@@ -108,55 +108,7 @@ for (let setting of settingsDataNew) {
         }
     }
 }
-/*
-// Update the enabled and checked checkboxes
-for (let setting of settingsDataNew) {
-    for (let data of setting.data) {
-        updateEnabled(data.id);
-        $("#" + data.id).click(function () {
-            updateEnabled(data.id);
-            if (data.unchecks !== undefined) {
-                data.unchecks.forEach((settingId) => {
-                    if ($(this).prop("checked")) {
-                        $("#" + settingId).prop("checked", false);
-                    }
-                    else {
-                        $(this).prop("checked", true);
-                    }
-                })
-            }
-        });
-    }
-}
 
-// Updates the enabled checkboxes, checks each node recursively
-function updateEnabled(settingId) {
-    let current;
-    settingsData.some((setting) => {
-        current = setting.data.find((data) => {
-            return data.id === settingId;
-        });
-        return current !== undefined;
-    });
-    if (current === undefined) {
-        return;
-    }
-    if (current.enables === undefined) {
-        return;
-    }
-    else {
-        for (let enableId of current.enables) {
-            if ($("#" + current.id).prop("checked") && !$("#" + current.id).parent().parent().hasClass("disabled")) {
-                $("#" + enableId).parent().parent().removeClass("disabled");
-            }
-            else {
-                $("#" + enableId).parent().parent().addClass("disabled");
-            }
-            updateEnabled(enableId);
-        }
-    }
-}
-*/
 let scoreboardReady = false;
 let playerDataReady = false;
 let returningToLobby = false;
@@ -190,40 +142,63 @@ function clearPlayerData() {
     playerDataReady = false;
 }
 
+function getPlayerCount(){
+    let count = 0;
+    for (let entryId in quiz.players) {
+        count++;
+    }
+    return count;
+}
+
 // Write the final result at the end of the game
 function writeResultsToChat() {
+    let firstIterate = true;
+    let count = getPlayerCount();
     let tmpData = [];
     for (let key of Object.keys(playerData)) {
         tmpData.push(playerData[key]);
     }
     let oldMessage = gameChat.$chatInputField.val();
-    //gameChat.$chatInputField.val("========FINAL RESULT========");
+    //gameChat.$chatInputField.val("count: " + count);
     //gameChat.sendMessage();
-    //obj.table.push({Game: 2});
     if (!returningToLobby) {
-        //gameChat.$chatInputField.val("!returning to Lobby");
-        //gameChat.sendMessage();
         createNewTable();
-        //gameChat.$chatInputField.val("createdTable");
-        //gameChat.sendMessage();
 		for(let entryId in quiz.players){
-            let newScore = {
-                name: tmpData[entryId].name,
-                score: tmpData[entryId].score
-            };
-            //gameChat.$chatInputField.val(newScore.name + " " + newScore.score);
+            if(firstIterate == true){
+                if(entryId > 0){
+                    entryId=0;
+                }
+            }
+            //gameChat.$chatInputField.val("count: " + count + "EntryId: " + entryId);
             //gameChat.sendMessage();
-            //gameChat.$chatInputField.val(Score-Download);
-            //gameChat.sendMessage();
-            exportData.push(newScore);
-		}
-        //gameChat.$chatInputField.val("Score-Download");
-        //gameChat.sendMessage();
+            let loop = true;
+            while(loop == true && entryId<count){
+                try{
+                    //gameChat.$chatInputField.val("try");
+                    //gameChat.sendMessage();
+                    let y = tmpData[entryId].name;
+                    //gameChat.$chatInputField.val(tmpData[entryId].name);
+                    //gameChat.sendMessage();
+                    let x = tmpData[entryId].score;
+                    loop = false;
+                }
+                catch (e){
+                    //gameChat.$chatInputField.val("catch");
+                    //gameChat.sendMessage();
+                    loop = true;
+                    entryId++;
+                }
+            }
+                let newScore = {
+                    name: tmpData[entryId].name,
+                    score :tmpData[entryId].score
+                };
+                exportData.push(newScore);
+            firstIterate = false;
+            }
         if($("#smAutoDownload").prop("checked")){
             download();
         }
-        //gameChat.$chatInputField.val("Score-Download done");
-        //gameChat.sendMessage();
     }
     else {
         for(let entryId in quiz.players){
@@ -324,7 +299,7 @@ function setup() {
         if (payload.error) {
             return;
         }
-        if (payload.settings.gameMode !== "Ranked") {
+        if (quiz.gameMode !== "Ranked") {
             answerResultsRigTracker.bindListener();
             quizEndRigTracker.bindListener();
             returnLobbyVoteListener.bindListener();
@@ -337,24 +312,6 @@ function setup() {
         clearPlayerData();
     });
 
-    // Enable or disable rig tracking on checking or unchecking the rig tracker checkbox
-    /*
-    $("#smRigTracker").click(function () {
-        let rigTrackerEnabled = $(this).prop("checked");
-        if (!rigTrackerEnabled) {
-            quizReadyRigTracker.unbindListener();
-            answerResultsRigTracker.unbindListener();
-            quizEndRigTracker.unbindListener();
-            returnLobbyVoteListener.unbindListener();
-        }
-        else {
-            quizReadyRigTracker.bindListener();
-            answerResultsRigTracker.bindListener();
-            quizEndRigTracker.bindListener();
-            returnLobbyVoteListener.bindListener();
-        }
-    });
-*/
     // bind listeners
     quizReadyRigTracker.bindListener();
     answerResultsRigTracker.bindListener();
