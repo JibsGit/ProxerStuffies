@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         AMQ Score Download
-// @version      1.2.0
+// @version      1.4.0
 // @description  Displays Score Final in AMQ of all Players and downloads a json of them
 // @author       Jib
 // @match        https://animemusicquiz.com/*
 // @require      https://raw.githubusercontent.com/TheJoseph98/AMQ-Scripts/master/common/amqScriptInfo.js
 // @grant        none
-// @downloadURL  https://github.com/JibsGit/ProxerStuffies/blob/main/AMQ_Score_Downloader.user.js
-// @updateURL    https://github.com/JibsGit/ProxerStuffies/blob/main/AMQ_Score_Downloader.user.js
+// @downloadURL  https://github.com/JibsGit/ProxerStuffies/raw/main/AMQ_Score_Downloader.user.js
+// @updateURL    https://github.com/JibsGit/ProxerStuffies/raw/main/AMQ_Score_Downloader.user.js
 // ==/UserScript==
 
 // don't load on login page
