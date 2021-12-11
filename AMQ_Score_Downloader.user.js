@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ Score Download
-// @version      1.0.7
+// @version      1.0.8
 // @description  Displays Score Final in AMQ of all Players and downloads a json of them
 // @author       Jib
 // @match        https://animemusicquiz.com/*
