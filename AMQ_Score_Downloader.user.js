@@ -201,10 +201,43 @@ function writeResultsToChat() {
         }
     }
     else {
-        for(let entryId in quiz.players){
-            gameChat.$chatInputField.val("Score: " + tmpData[entryId].name + " " + tmpData[entryId].score);
-            gameChat.sendMessage();
-		}
+        createNewTable();
+		for(let entryId in quiz.players){
+            if(firstIterate == true){
+                if(entryId > 0){
+                    entryId=0;
+                }
+            }
+            //gameChat.$chatInputField.val("count: " + count + "EntryId: " + entryId);
+            //gameChat.sendMessage();
+            let loop = true;
+            while(loop == true && entryId<count){
+                try{
+                    //gameChat.$chatInputField.val("try");
+                    //gameChat.sendMessage();
+                    let y = tmpData[entryId].name;
+                    //gameChat.$chatInputField.val(tmpData[entryId].name);
+                    //gameChat.sendMessage();
+                    let x = tmpData[entryId].score;
+                    loop = false;
+                }
+                catch (e){
+                    //gameChat.$chatInputField.val("catch");
+                    //gameChat.sendMessage();
+                    loop = true;
+                    entryId++;
+                }
+            }
+                let newScore = {
+                    name: tmpData[entryId].name,
+                    score :tmpData[entryId].score
+                };
+                exportData.push(newScore);
+            firstIterate = false;
+            }
+        if($("#smAutoDownload").prop("checked")){
+            download();
+        }
     }
     gameChat.$chatInputField.val(oldMessage);
 }
