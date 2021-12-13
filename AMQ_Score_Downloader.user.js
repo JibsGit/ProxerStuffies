@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AMQ Score Download
-// @version      1.0.8
+// @version      1.0.9
 // @description  Displays Score Final in AMQ of all Players and downloads a json of them
 // @author       Jib
 // @match        https://animemusicquiz.com/*
@@ -112,7 +112,6 @@ for (let setting of settingsDataNew) {
 let scoreboardReady = false;
 let playerDataReady = false;
 let returningToLobby = false;
-let missedFromOwnList = 0;
 let playerData = {};
 
 // listeners
